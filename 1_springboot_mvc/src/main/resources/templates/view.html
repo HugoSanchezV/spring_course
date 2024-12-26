@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">Hola mundo de Spring Boot</title>
+</head>
+<body>
+
+<h2 th:text="${message}"></h2>
+
+<ul>
+    <li th:text="'Nombre: ' + ${user.name}"></li>
+    <li th:text="'Apellido: ' + ${user.lastname}"></li>
+    <li th:text="'Creado en: ' + ${user.createdAt}"></li>
+</ul>
+</body>
+</html>
