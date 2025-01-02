@@ -5,11 +5,12 @@ import com.hugo.spingboot.springmvc.app.services.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.Optional;
 
-@Controller
-@RequestMapping("/users") // grupo de ruts con inicial app, prefijo
+@Controller// grupo de ruts con inicial app, prefijo
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService service;
@@ -22,7 +23,7 @@ public class UserController {
     public String view(Model model) {
         model.addAttribute("title", "Hola Mundo Spring Boot");
         model.addAttribute("message", "Esta es una aplicacion de ejemplo en sping boot");
-        model.addAttribute("user", new User("Hugo", "Sanchez"));
+        model.addAttribute("user", new User("Hugo", "Sanchez Velazquez"));
 
         return "view";
     }
@@ -42,7 +43,7 @@ public class UserController {
     }
 
     @GetMapping("/form/edit/{id}")
-    public String form(@PathVariable Long id, Model model) {
+    public String form(@PathVariable Long id, Model model, RedirectAttributes redirecct) {
         Optional<User> optionalUser = service.findById(id);
 
         if(optionalUser.isPresent()) {
@@ -50,19 +51,31 @@ public class UserController {
             model.addAttribute("user", optionalUser.get());
             return "form";
         } else {
-            return "redirect:/users";
+            redirecct.addFlashAttribute("error", "No se ha encontrado el registro");
+            return "redirect:/users/";
         }
     }
 
-    @PostMapping
-    public String form(User user, Model model) {
+    @PostMapping("/form")
+    public String form(User user, Model model, RedirectAttributes redirect) {
+        String message = (user.getId() != null && user.getId() > 0) ? "El usuario ha sido actualizado": "El usuario ha sido creado" ;
+
         service.save(user);
-        return "redirect:/users";
+        redirect.addFlashAttribute("success", message);
+        return "redirect:/users/";
     }
 
    @GetMapping("/delete/{id}")
-   public String delete(@PathVariable Long id) {
-        service.remove(id);
-        return "redirect:/users";
+   public String delete(@PathVariable Long id, RedirectAttributes redirect) {
+
+        Optional<User> optionalUser = service.findById(id);
+
+        if(optionalUser.isPresent()) {
+            service.remove(id);
+            redirect.addFlashAttribute("success", "El usuario " + optionalUser.get().getName() + " Ha sido eliminado");
+        } else {
+            redirect.addFlashAttribute("error", "Error con  usuario " + optionalUser.get().getName() + ", no ha sido eliminado");
+        }
+       return "redirect:/users/";
    }
 }

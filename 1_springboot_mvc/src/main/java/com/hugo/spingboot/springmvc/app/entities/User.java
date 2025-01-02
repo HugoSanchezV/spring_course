@@ -7,12 +7,13 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
     private String lastname;
     private String email;
     private String username;
+    private String password;
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
@@ -29,7 +30,6 @@ public class User {
         this.createdAt = LocalDateTime.now();
     }
 
-    @PrePersist
     public Long getId() {
         return id;
     }
@@ -76,5 +76,13 @@ public class User {
 
     public void setCreatedAt(LocalDateTime createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
