@@ -21,6 +21,9 @@ public class Url {
     @Column(name = "short_code")
     private String shortCode;
 
+    @Column(name = "access_count",nullable = false)
+    private int accessCount;
+
     @CreationTimestamp
     @Column(name = "create_at")
     private LocalDateTime createdAt;
@@ -67,5 +70,13 @@ public class Url {
 
     public void setUpdatedAt(LocalDateTime updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public int getAccessCount() {
+        return accessCount;
+    }
+
+    public void setAccessCount(int accessCount) {
+        this.accessCount = accessCount;
     }
 }
