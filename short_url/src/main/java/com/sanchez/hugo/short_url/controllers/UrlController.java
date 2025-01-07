@@ -51,7 +51,7 @@ public class UrlController {
                 Url url = urlOptional.get();
                 url.setAccessCount(url.getAccessCount() + 1);
                 service.save(url);
-                return ResponseEntity.status(HttpStatus.FOUND).location(URI.create(url.getUrl())).build();
+                return ResponseEntity.status(HttpStatus.OK).body(url);
             }
             return ResponseEntity.notFound().build();
         } catch(Exception e){
